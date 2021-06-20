@@ -1,4 +1,4 @@
-use crate::game::map::{WorldMap, Coordinate, HexCell};
+use crate::core::map::{WorldMap, Coordinate, HexCell};
 use std::sync::{Arc};
 use std::cmp;
 use dashmap::DashMap;

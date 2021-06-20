@@ -1,10 +1,11 @@
 use log;
 use simple_logger::SimpleLogger;
-use crate::game::{Criwen};
 use clap::{App, SubCommand, ArgMatches};
+use crate::server::GameServer;
 
-mod game;
 mod net;
+mod server;
+mod core;
 
 
 #[tokio::main]
@@ -27,12 +28,7 @@ async fn main() {
 
 
     match app.clone().get_matches().subcommand().clone() {
-        ("start", Some(sub_app)) => {
-            log::info!("Server starting");
-            let criwen = Criwen::new();
-            Criwen::init(criwen).await;
-            log::info!("Server shut down");
-        }
+        ("start", Some(sub_app)) => { start_server().await }
         ("stop", Some(sub_app)) => {}
         ("restart", Some(sub_app)) => {}
         ("ui", Some(sub_app)) => {}
@@ -40,4 +36,11 @@ async fn main() {
             app.print_help().unwrap();
         }
     }
+}
+
+async fn start_server() {
+    log::info!("Server starting");
+    let server = GameServer::new();
+    GameServer::init(server).await;
+    log::info!("Server shut down");
 }

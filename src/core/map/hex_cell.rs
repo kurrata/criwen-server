@@ -1,4 +1,4 @@
-use crate::game::map::{HexCell};
+use crate::core::map::{HexCell};
 
 impl HexCell {
     pub fn new() -> HexCell {

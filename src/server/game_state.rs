@@ -1,7 +1,10 @@
-use crate::game::GameState;
 use std::sync::{Arc};
 use dashmap::DashMap;
-use crate::game::map::WorldMap;
+use crate::core::map::{WorldMap, Coordinate, HexCell};
+
+pub struct GameState {
+    pub map: Arc<DashMap<Coordinate, HexCell>>,
+}
 
 impl GameState {
     pub fn new() -> GameState {

@@ -1,4 +1,4 @@
-use crate::game::map::Coordinate;
+use crate::core::map::Coordinate;
 
 impl Coordinate {
     pub fn new(x: i16, y: i16) -> Coordinate {
