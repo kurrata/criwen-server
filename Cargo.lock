@@ -63,6 +63,7 @@ dependencies = [
 name = "criwen"
 version = "0.1.0"
 dependencies = [
+ "bytes",
  "dashmap",
  "log",
  "num_cpus",

@@ -14,4 +14,4 @@ log = "0.4.14"
 simple_logger = "1.11.0"
 num_cpus = "1.13.0"
 dashmap = "4.0.2"
-
+bytes = "1"

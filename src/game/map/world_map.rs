@@ -1,6 +1,5 @@
 use crate::game::map::{WorldMap, Coordinate, HexCell};
-use std::sync::{Arc, RwLock};
-use std::collections::HashMap;
+use std::sync::{Arc};
 use std::cmp;
 use dashmap::DashMap;
 
@@ -19,7 +18,7 @@ impl WorldMap {
             let mut current_step = -radius;
             for i in 0..cpu_count {
                 let mut next_step = current_step + step_size * 2;
-                if (i == cpu_count - 1) {
+                if i == cpu_count - 1 {
                     next_step = radius + 1;
                 }
                 thread_range.push((current_step, next_step));

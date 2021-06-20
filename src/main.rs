@@ -1,24 +1,16 @@
-use std::sync::{Arc, Mutex, RwLock};
-use std::collections::HashMap;
-use log::*;
+use log;
 use simple_logger::SimpleLogger;
-use dashmap::DashMap;
-use crate::game::GameState;
-use crate::game::map::{HexCell, Coordinate, WorldMap};
+use crate::game::{Criwen};
 
 mod game;
-
-
-
-
-
+mod net;
 
 
 #[tokio::main]
 async fn main() {
     SimpleLogger::new().init().unwrap();
     log::info!("Server starting");
-    let my_game = GameState::new();
-    WorldMap::grow(my_game.map, 1000).await;
+    let criwen = Criwen::new();
+    Criwen::init(criwen).await;
     log::info!("Server shut down");
 }
