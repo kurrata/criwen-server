@@ -35,7 +35,7 @@ impl GameServer {
         game.threads.clone().lock().unwrap().push(tokio::spawn(async move {
             log::debug!("Start: Local socket");
             while *lock.lock().unwrap() == false {
-                let (mut socket, _) = listener.accept().await.unwrap();
+                let (socket, _) = listener.accept().await.unwrap();
             }
             log::debug!("Done: Local socket");
         }));

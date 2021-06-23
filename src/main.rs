@@ -6,9 +6,9 @@ extern crate serde_derive;
 
 use log;
 use simple_logger::SimpleLogger;
-use clap::{App, SubCommand, ArgMatches, Arg};
+use clap::{App, SubCommand, Arg};
 use crate::server::GameServer;
-use log::{Level, LevelFilter};
+use log::{ LevelFilter};
 use crate::core::settings::Settings;
 
 mod net;
@@ -18,7 +18,7 @@ mod core;
 
 #[tokio::main]
 async fn main() {
-    let config = Settings::new();
+    let config = Settings::new().await;
     let mut app = App::new("Criwen")
         .args(&[
             Arg::with_name("v").short("v").multiple(true).help("Sets the level of verbosity\
@@ -50,18 +50,18 @@ async fn main() {
     }
 
     match app.clone().get_matches().subcommand() {
-        ("start", Some(sub_app)) => { start_server().await }
-        ("stop", Some(sub_app)) => {}
-        ("restart", Some(sub_app)) => {}
-        ("ui", Some(sub_app)) => {}
-        (a, b) => {
+        ("start", _) => { start_server().await }
+        ("stop", _) => {}
+        ("restart", _) => {}
+        ("ui", _) => {}
+        _ => {
             app.print_help().unwrap();
         }
     }
 }
 
 async fn init_logging(level: u64) {
-    let mut logger = SimpleLogger::new();
+    let logger = SimpleLogger::new();
     match level {
         0 => { logger.with_level(LevelFilter::Off) }
         1 => { logger.with_level(LevelFilter::Error) }

@@ -1,8 +1,7 @@
-use std::env;
-use config::{ConfigError, Config};
-use std::io::{Write, Read};
+use config::{Config};
+use std::io::{Write};
 use std::fs::File;
-use std::path::{Path, PathBuf};
+use std::path::{PathBuf};
 
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -32,30 +31,30 @@ impl Settings {
 }
 
 impl Settings {
-    pub fn new() -> Config {
-        use config::{ConfigError, Config, File, Environment};
+    pub async fn new() -> Config {
+        use config::{File};
 
-        Settings::write_default_config();
-        let mut base_path = Settings::config_dir();
+        Settings::write_default_config().await;
+        let base_path = Settings::config_dir();
         let mut s = Config::new();
-        let t = File::with_name(base_path.join("default").to_str().unwrap());
-        s.merge(File::with_name(base_path.join("default").to_str().unwrap()));
-        s.merge(File::with_name(base_path.join("development").to_str().unwrap()).required(false));
+        File::with_name(base_path.join("default").to_str().unwrap());
+        s.merge(File::with_name(base_path.join("default").to_str().unwrap())).unwrap();
+        s.merge(File::with_name(base_path.join("development").to_str().unwrap()).required(false)).unwrap();
         s
     }
 
     fn config_dir() -> PathBuf {
         let path = std::env::current_exe().unwrap();
-        let mut base_path = std::path::Path::new(&path).parent().unwrap().join("config");
+        let base_path = std::path::Path::new(&path).parent().unwrap().join("config");
         std::fs::create_dir_all(base_path.clone()).unwrap();
         return base_path;
     }
 
     async fn write_default_config() {
-        let mut base_path = Settings::config_dir();
+        let base_path = Settings::config_dir();
         let s = toml::to_string(&Settings::default()).unwrap();
         let mut file = File::create(base_path.join("default.toml")).unwrap();
-        file.write_all(s.as_bytes());
+        file.write_all(s.as_bytes()).unwrap();
     }
 }
 

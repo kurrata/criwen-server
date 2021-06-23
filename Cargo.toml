@@ -16,4 +16,7 @@ num_cpus = "1.13.0"
 dashmap = "4.0.2"
 bytes = "1"
 clap = "2.33.3"
-
+config = "0.11"
+serde_derive = "^1.0.8"
+toml = "0.5.8"
+json = "0.12.4"
