@@ -8,12 +8,14 @@ use log;
 use simple_logger::SimpleLogger;
 use clap::{App, SubCommand, Arg};
 use crate::server::GameServer;
-use log::{ LevelFilter};
+use log::{LevelFilter};
 use crate::core::settings::Settings;
+use crate::client::ui;
 
 mod net;
 mod server;
 mod core;
+mod client;
 
 
 #[tokio::main]
@@ -53,7 +55,7 @@ async fn main() {
         ("start", _) => { start_server().await }
         ("stop", _) => {}
         ("restart", _) => {}
-        ("ui", _) => {}
+        ("ui", _) => { start_ui().await }
         _ => {
             app.print_help().unwrap();
         }
@@ -77,4 +79,10 @@ async fn start_server() {
     let server = GameServer::new();
     GameServer::init(server).await;
     log::info!("Server shut down");
+}
+
+async fn start_ui() {
+    log::info!("UI starting");
+    ui().await;
+    log::info!("UI shut down");
 }

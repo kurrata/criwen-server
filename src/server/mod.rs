@@ -2,6 +2,7 @@ use std::sync::{Arc, Mutex};
 use crate::server::game_state::GameState;
 use tokio::task::JoinHandle;
 use tokio::net::TcpListener;
+use tokio::io::AsyncReadExt;
 
 mod game_state;
 
@@ -35,7 +36,10 @@ impl GameServer {
         game.threads.clone().lock().unwrap().push(tokio::spawn(async move {
             log::debug!("Start: Local socket");
             while *lock.lock().unwrap() == false {
-                let (socket, _) = listener.accept().await.unwrap();
+                let (mut socket, _) = listener.accept().await.unwrap();
+                let mut buffer = Vec::new();
+                socket.read_to_end(&mut buffer).await.unwrap();
+                log::debug!("{}", String::from_utf8(buffer).unwrap());
             }
             log::debug!("Done: Local socket");
         }));
