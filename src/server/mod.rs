@@ -3,6 +3,7 @@ use crate::server::game_state::GameState;
 use tokio::task::JoinHandle;
 use tokio::net::TcpListener;
 use tokio::io::AsyncReadExt;
+use crate::core::settings::Settings;
 
 mod game_state;
 
@@ -32,7 +33,11 @@ impl GameServer {
 
     async fn start_local_socket(game: Arc<GameServer>) {
         let lock = game.shut_down_in_progress.clone();
-        let listener = TcpListener::bind("127.0.0.1:6379").await.unwrap();
+        let address = [
+            "127.0.0.1".to_string(),
+            Settings::new().await.get::<u64>("server.local_port").unwrap().to_string()
+        ].join(":");
+        let listener = TcpListener::bind(address).await.unwrap();
         game.threads.clone().lock().unwrap().push(tokio::spawn(async move {
             log::debug!("Start: Local socket");
             while *lock.lock().unwrap() == false {
